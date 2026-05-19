@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FINEFIT — Awaken Your Inner Legend</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
+<style>
+/* ─── CSS RESET & ROOT ─────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --forest:    #0d1a0f;
+  --deep:      #060e07;
+  --canopy:    #132016;
+  --moss:      #1e3320;
+  --fern:      #2a4a2d;
+  --sage:      #4a7c52;
+  --mint:      #7ab87f;
+  --glow:      #a8d5a2;
+  --petal:     #c4866a;
+  --blossom:   #d4a0a0;
+  --cherry:    #8b3a3a;
+  --gold:      #c8a96e;
+  --mist:      #b8c9b4;
+  --cream:     #e8ddc8;
+  --ink:       #1a1a14;
+
+  --font-display: 'Cinzel', serif;
+  --font-body:    'Cormorant Garamond', serif;
+  --font-label:   'Josefin Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--deep);
+  color: var(--cream);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ─── CUSTOM CURSOR ─────────────────────────────────── */
+body { cursor: none; }
+.cursor {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--mint);
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  mix-blend-mode: screen;
+  transition: transform 0.15s ease, opacity 0.15s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(168,213,162,0.5);
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transition: transform 0.35s ease, width 0.3s, height 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+/* ─── SCROLLBAR ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 2px; }
+
+/* ─── NAV ────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.5rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(6,14,7,0.95), transparent);
+  backdrop-filter: blur(0px);
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled {
+  background: rgba(6,14,7,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(122,184,127,0.1);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.7rem;
+  text-decoration: none;
+}
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1.1rem; letter-spacing: 0.3em;
+  color: var(--cream); font-weight: 600;
+}
+.nav-links {
+  display: flex; gap: 2.5rem; list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-label);
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--mist);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px; background: var(--mint);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.nav-links a:hover { color: var(--mint); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* ─── HERO ───────────────────────────────────────────── */
+.hero {
+  height: 100vh; min-height: 700px;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 70%, rgba(30,51,32,0.6) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 30%, rgba(139,58,58,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(42,74,45,0.3) 0%, transparent 60%),
+    linear-gradient(180deg, var(--deep) 0%, #0a1a0c 40%, #0d2010 70%, var(--deep) 100%);
+}
+.hero-trees {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 2px 80px at 15% 100%, rgba(30,51,32,0.8) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 120px at 25% 100%, rgba(19,32,22,0.9) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 100px at 40% 100%, rgba(30,51,32,0.7) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 140px at 60% 100%, rgba(13,26,15,0.95) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 90px at 75% 100%, rgba(30,51,32,0.8) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 110px at 88% 100%, rgba(19,32,22,0.9) 0%, transparent 100%);
+}
+.hero-mist {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(168,213,162,0.05) 0%, transparent 100%);
+  animation: mistFloat 8s ease-in-out infinite alternate;
+}
+@keyframes mistFloat {
+  from { transform: translateX(-20px) scaleY(1); opacity: 0.6; }
+  to   { transform: translateX(20px)  scaleY(1.1); opacity: 1; }
+}
+.hero-particles {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: var(--glow);
+  animation: drift linear infinite;
+  opacity: 0;
+}
+@keyframes drift {
+  0%   { transform: translateY(100vh) translateX(0);   opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-100px) translateX(60px); opacity: 0; }
+}
+.hero-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1.5rem;
+  animation: heroReveal 1.8s ease both;
+}
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow {
+  font-family: var(--font-label);
+  font-size: 0.6rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--sage);
+  animation: heroReveal 1.8s 0.2s ease both;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 900; letter-spacing: 0.15em;
+  line-height: 0.9;
+  background: linear-gradient(160deg, var(--cream) 0%, var(--glow) 50%, var(--mint) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: heroReveal 1.8s 0.3s ease both;
+}
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-style: italic; color: var(--mist);
+  letter-spacing: 0.05em;
+  animation: heroReveal 1.8s 0.5s ease both;
+}
+.hero-tagline {
+  font-family: var(--font-label);
+  font-size: 0.65rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--sage);
+  animation: heroReveal 1.8s 0.7s ease both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-label);
+  font-size: 0.6rem; letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(122,184,127,0.5);
+  color: var(--glow);
+  background: rgba(30,51,32,0.3);
+  backdrop-filter: blur(8px);
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, color 0.3s, transform 0.3s;
+  animation: heroReveal 1.8s 0.9s ease both;
+}
+.btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(42,74,45,0.6), rgba(122,184,127,0.1));
+  transform: translateX(-100%);
+  transition: transform 0.4s;
+}
+.btn:hover::before { transform: translateX(0); }
+.btn:hover { border-color: var(--mint); color: var(--cream); transform: translateY(-2px); }
+.btn-arrow { font-size: 0.8rem; transition: transform 0.3s; }
+.btn:hover .btn-arrow { transform: translateX(4px); }
+
+.hero-scroll {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-family: var(--font-label); font-size: 0.5rem;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--sage);
+  animation: heroReveal 2s 1.5s ease both;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--sage), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+  50%       { opacity: 1;   transform: scaleY(1); }
+}
+
+/* ─── SECTION SHARED ─────────────────────────────────── */
+section { position: relative; }
+
+.section-label {
+  font-family: var(--font-label);
+  font-size: 0.55rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--sage);
+  display: block; margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700; letter-spacing: 0.08em;
+  line-height: 1.1;
+  color: var(--cream);
+}
+.section-body {
+  font-family: var(--font-body);
+  font-size: 1.05rem; line-height: 1.8;
+  color: var(--mist); font-weight: 300;
+}
+
+/* ─── PILLARS ─────────────────────────────────────────── */
+.pillars {
+  padding: 6rem 3rem;
+  background: var(--forest);
+  border-top: 1px solid rgba(122,184,127,0.08);
+  border-bottom: 1px solid rgba(122,184,127,0.08);
+}
+.pillars-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.pillar {
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  gap: 1rem; padding: 2rem 1rem;
+  border: 1px solid rgba(122,184,127,0.08);
+  background: rgba(13,26,15,0.5);
+  position: relative; overflow: hidden;
+  transition: border-color 0.4s, transform 0.4s;
+}
+.pillar::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--sage), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+.pillar:hover { border-color: rgba(122,184,127,0.3); transform: translateY(-4px); }
+.pillar:hover::before { transform: scaleX(1); }
+.pillar-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(122,184,127,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  background: rgba(30,51,32,0.4);
+}
+.pillar-name {
+  font-family: var(--font-display);
+  font-size: 0.75rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--cream);
+}
+.pillar-desc {
+  font-family: var(--font-label);
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: var(--sage);
+}
+
+/* ─── REALMS ─────────────────────────────────────────── */
+.realms-intro {
+  padding: 8rem 3rem 4rem;
+  text-align: center;
+  background: var(--deep);
+}
+.realms-intro .section-title { margin: 0.5rem auto 1.5rem; max-width: 600px; }
+.realms-intro .section-body  { max-width: 500px; margin: 0 auto; }
+
+.realms-grid {
+  padding: 4rem 3rem 8rem;
+  background: var(--deep);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto;
+  gap: 1.5rem;
+  max-width: 1400px; margin: 0 auto;
+}
+
+.realm-card {
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(122,184,127,0.1);
+  cursor: none;
+  transition: border-color 0.4s;
+}
+.realm-card:hover { border-color: rgba(122,184,127,0.35); }
+
+/* Layout spans */
+.realm-card:nth-child(1) { grid-column: span 5; grid-row: span 2; min-height: 520px; }
+.realm-card:nth-child(2) { grid-column: span 4; min-height: 250px; }
+.realm-card:nth-child(3) { grid-column: span 3; min-height: 250px; }
+.realm-card:nth-child(4) { grid-column: span 4; min-height: 250px; }
+.realm-card:nth-child(5) { grid-column: span 3; min-height: 250px; }
+.realm-card:nth-child(6) { grid-column: span 4; grid-row: span 2; min-height: 520px; }
+.realm-card:nth-child(7) { grid-column: span 4; min-height: 250px; }
+.realm-card:nth-child(8) { grid-column: span 4; min-height: 250px; }
+
+.realm-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.realm-card:hover .realm-bg { transform: scale(1.06); }
+
+/* CHERRY FOREST */
+.realm-1 .realm-bg {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgba(139,58,58,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 30% 20%, rgba(180,100,100,0.25) 0%, transparent 60%),
+    linear-gradient(160deg, #1a0a0a 0%, #2d1515 30%, #1a100a 60%, #0a0a05 100%);
+}
+.realm-1::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(ellipse 2px 40% at 20% 100%, rgba(139,58,58,0.6) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 55% at 35% 100%, rgba(100,30,30,0.7) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 45% at 65% 100%, rgba(139,58,58,0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 50% at 80% 100%, rgba(100,30,30,0.6) 0%, transparent 100%);
+}
+.realm-1-petals {
+  position: absolute; inset: 0; z-index: 1;
+  background-image:
+    radial-gradient(ellipse 4px 2px at 25% 30%, rgba(212,160,160,0.7) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 45% 20%, rgba(196,134,106,0.6) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 2px at 70% 40%, rgba(212,160,160,0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 15% 55%, rgba(196,134,106,0.4) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 2px at 85% 25%, rgba(212,160,160,0.6) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 2px at 55% 60%, rgba(196,134,106,0.5) 0%, transparent 100%);
+  animation: petalDrift 12s ease-in-out infinite alternate;
+}
+@keyframes petalDrift {
+  from { transform: translate(0, 0) rotate(0deg); }
+  to   { transform: translate(15px, 8px) rotate(3deg); }
+}
+
+/* EMERALD PEAKS */
+.realm-2 .realm-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(13,40,20,0.8) 0%, transparent 80%),
+    radial-gradient(ellipse 50% 70% at 50% 30%, rgba(168,213,162,0.06) 0%, transparent 70%),
+    linear-gradient(180deg, #060e07 0%, #0a2010 40%, #081a0c 80%, #040c06 100%);
+}
+
+/* STORMFALL CLIFFS */
+.realm-3 .realm-bg {
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(30,51,80,0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(100,130,180,0.1) 0%, transparent 60%),
+    linear-gradient(200deg, #050812 0%, #0a1020 35%, #081530 65%, #040810 100%);
+}
+
+/* DREAMING GROVE */
+.realm-4 .realm-bg {
+  background:
+    radial-gradient(ellipse 70% 60% at 30% 60%, rgba(60,30,80,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(100,200,150,0.08) 0%, transparent 60%),
+    linear-gradient(135deg, #0c0714 0%, #150d25 40%, #0a1010 70%, #080510 100%);
+}
+
+/* VOLCANIC SHRINE */
+.realm-5 .realm-bg {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgba(180,60,10,0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 30%, rgba(200,100,20,0.15) 0%, transparent 60%),
+    linear-gradient(180deg, #0a0502 0%, #1a0a04 40%, #150804 70%, #080404 100%);
+}
+.realm-5::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 1;
+  height: 30%;
+  background: linear-gradient(to top, rgba(180,60,10,0.15), transparent);
+  animation: emberGlow 4s ease-in-out infinite alternate;
+}
+@keyframes emberGlow {
+  from { opacity: 0.5; }
+  to   { opacity: 1; }
+}
+
+/* CRYSTAL DEPTHS */
+.realm-6 .realm-bg {
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(20,80,120,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 30% 30%, rgba(100,200,220,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 70% 70%, rgba(60,150,200,0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #02080f 0%, #040d18 40%, #030a15 70%, #020609 100%);
+}
+
+/* WHISPERING DUNES */
+.realm-7 .realm-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 80%, rgba(180,150,80,0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 20%, rgba(200,169,110,0.1) 0%, transparent 60%),
+    linear-gradient(160deg, #0d0a02 0%, #1a1505 35%, #140f04 65%, #0a0804 100%);
+}
+
+/* MOONVEIL HIGHLANDS */
+.realm-8 .realm-bg {
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 30%, rgba(180,180,220,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 80%, rgba(60,80,100,0.5) 0%, transparent 80%),
+    linear-gradient(180deg, #06070e 0%, #0a0c18 40%, #080a14 70%, #050608 100%);
+}
+
+.realm-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(to top, rgba(6,14,7,0.85) 0%, rgba(6,14,7,0.2) 60%, transparent 100%);
+  transition: background 0.4s;
+}
+.realm-card:hover .realm-overlay {
+  background: linear-gradient(to top, rgba(6,14,7,0.7) 0%, rgba(6,14,7,0.1) 50%, transparent 100%);
+}
+.realm-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  z-index: 3; padding: 1.8rem;
+  transform: translateY(8px);
+  transition: transform 0.4s;
+}
+.realm-card:hover .realm-content { transform: translateY(0); }
+.realm-tag {
+  display: inline-block;
+  font-family: var(--font-label);
+  font-size: 0.5rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--sage);
+  border: 1px solid rgba(122,184,127,0.3);
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.realm-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  font-weight: 700; letter-spacing: 0.08em;
+  color: var(--cream); line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+.realm-desc {
+  font-family: var(--font-body);
+  font-size: 0.85rem; color: var(--mist);
+  line-height: 1.5; font-style: italic;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s 0.05s, transform 0.4s 0.05s;
+}
+.realm-card:hover .realm-desc { opacity: 1; transform: translateY(0); }
+.realm-cta {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-label);
+  font-size: 0.5rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--mint);
+  text-decoration: none; margin-top: 0.8rem;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.4s 0.1s, transform 0.4s 0.1s, color 0.3s;
+}
+.realm-card:hover .realm-cta { opacity: 1; transform: translateY(0); }
+.realm-cta:hover { color: var(--glow); }
+.realm-cta-arrow { transition: transform 0.3s; }
+.realm-cta:hover .realm-cta-arrow { transform: translateX(4px); }
+
+/* Realm-specific accent colors */
+.realm-1 .realm-tag { color: var(--blossom); border-color: rgba(196,134,106,0.3); }
+.realm-1 .realm-cta { color: var(--blossom); }
+.realm-3 .realm-tag { color: #a0b8d8; border-color: rgba(160,184,216,0.3); }
+.realm-3 .realm-cta { color: #a0b8d8; }
+.realm-4 .realm-tag { color: #b8a0d8; border-color: rgba(184,160,216,0.3); }
+.realm-4 .realm-cta { color: #b8a0d8; }
+.realm-5 .realm-tag { color: #d4956a; border-color: rgba(212,149,106,0.3); }
+.realm-5 .realm-cta { color: #d4956a; }
+.realm-6 .realm-tag { color: #80c8e0; border-color: rgba(128,200,224,0.3); }
+.realm-6 .realm-cta { color: #80c8e0; }
+.realm-7 .realm-tag { color: var(--gold); border-color: rgba(200,169,110,0.3); }
+.realm-7 .realm-cta { color: var(--gold); }
+.realm-8 .realm-tag { color: #c0c8e0; border-color: rgba(192,200,224,0.3); }
+.realm-8 .realm-cta { color: #c0c8e0; }
+
+/* Realm icon top-right */
+.realm-icon {
+  position: absolute; top: 1.2rem; right: 1.2rem;
+  z-index: 3; font-size: 1.8rem; opacity: 0.7;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.realm-card:hover .realm-icon { opacity: 1; transform: scale(1.1) rotate(5deg); }
+
+/* ─── QUOTE BREAK ─────────────────────────────────────── */
+.quote-break {
+  padding: 7rem 3rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(30,51,32,0.4) 0%, transparent 70%),
+    var(--canopy);
+  border-top: 1px solid rgba(122,184,127,0.08);
+  border-bottom: 1px solid rgba(122,184,127,0.08);
+  position: relative; overflow: hidden;
+}
+.quote-break::before {
+  content: '"';
+  position: absolute; top: -1rem; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 15rem; line-height: 1;
+  color: rgba(122,184,127,0.04);
+  pointer-events: none;
+}
+.quote-text {
+  font-family: var(--font-body);
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  font-style: italic; font-weight: 300;
+  color: var(--cream); line-height: 1.4;
+  max-width: 800px; margin: 0 auto 1.5rem;
+  position: relative; z-index: 1;
+}
+.quote-attr {
+  font-family: var(--font-label);
+  font-size: 0.6rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--sage);
+}
+.quote-ornament {
+  display: block; margin: 1.5rem auto 0;
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sage), transparent);
+}
+
+/* ─── FEATURES ────────────────────────────────────────── */
+.features {
+  padding: 8rem 3rem;
+  background: var(--deep);
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: center;
+}
+.features-visual {
+  position: relative; height: 500px;
+}
+.features-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(122,184,127,0.12);
+}
+.features-circle:nth-child(1) {
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 40% 40%, rgba(30,51,32,0.5) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 70% 70%, rgba(122,184,127,0.05) 0%, transparent 60%),
+    linear-gradient(135deg, #0d1a0f, #132016);
+  animation: rotateSlow 30s linear infinite;
+}
+.features-circle:nth-child(2) {
+  inset: 15%;
+  border-color: rgba(122,184,127,0.2);
+  animation: rotateSlow 20s linear infinite reverse;
+}
+.features-circle:nth-child(3) {
+  inset: 30%;
+  border-color: rgba(122,184,127,0.3);
+  background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(42,74,45,0.4), transparent);
+  animation: rotateSlow 15s linear infinite;
+}
+.features-center {
+  position: absolute; inset: 35%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.features-center-icon { font-size: 3rem; }
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.features-dots {
+  position: absolute; inset: 0;
+}
+.feat-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
+  box-shadow: 0 0 8px var(--sage);
+}
+.feat-dot:nth-child(1) { top: 10%; left: 50%; }
+.feat-dot:nth-child(2) { top: 50%; right: 5%; }
+.feat-dot:nth-child(3) { bottom: 12%; left: 50%; }
+.feat-dot:nth-child(4) { top: 50%; left: 5%; }
+
+.features-text { display: flex; flex-direction: column; gap: 2.5rem; }
+.feature-item {
+  display: flex; gap: 1.2rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(122,184,127,0.08);
+}
+.feature-item:last-child { border-bottom: none; padding-bottom: 0; }
+.feature-num {
+  font-family: var(--font-display);
+  font-size: 0.6rem; color: var(--sage);
+  padding-top: 0.3rem; letter-spacing: 0.2em;
+  flex-shrink: 0;
+}
+.feature-title {
+  font-family: var(--font-display);
+  font-size: 1rem; letter-spacing: 0.12em;
+  color: var(--cream); margin-bottom: 0.5rem;
+}
+.feature-body {
+  font-family: var(--font-body);
+  font-size: 0.95rem; color: var(--mist);
+  line-height: 1.7; font-weight: 300;
+}
+
+/* ─── CALL TO ADVENTURE ───────────────────────────────── */
+.cta-section {
+  padding: 10rem 3rem;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(19,32,22,0.8) 0%, transparent 70%),
+    var(--forest);
+  border-top: 1px solid rgba(122,184,127,0.08);
+  position: relative; overflow: hidden;
+}
+.cta-bg-rings {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.cta-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(122,184,127,0.06);
+}
+.cta-ring:nth-child(1) { width: 200px; height: 200px; }
+.cta-ring:nth-child(2) { width: 400px; height: 400px; animation: rotateSlow 40s linear infinite; }
+.cta-ring:nth-child(3) { width: 650px; height: 650px; animation: rotateSlow 60s linear infinite reverse; }
+.cta-ring:nth-child(4) { width: 900px; height: 900px; }
+
+.cta-content { position: relative; z-index: 1; }
+.cta-eyebrow {
+  font-family: var(--font-label);
+  font-size: 0.6rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--sage);
+  display: block; margin-bottom: 1.5rem;
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 900; letter-spacing: 0.12em;
+  color: var(--cream); line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.cta-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  letter-spacing: 0.1em; color: var(--sage);
+  margin-bottom: 2rem;
+}
+.cta-body {
+  font-family: var(--font-body);
+  font-style: italic; font-size: 1.1rem;
+  color: var(--mist); max-width: 480px;
+  margin: 0 auto 3rem; line-height: 1.7;
+}
+.btn-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: rgba(42,74,45,0.6);
+  border-color: rgba(122,184,127,0.6);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: rgba(122,184,127,0.2);
+  color: var(--mist);
+}
+.btn-ghost:hover { color: var(--cream); }
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer {
+  padding: 4rem 3rem 2rem;
+  background: var(--ink);
+  border-top: 1px solid rgba(122,184,127,0.1);
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem; padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(122,184,127,0.08);
+}
+.footer-brand .nav-logo { margin-bottom: 1rem; }
+.footer-tagline {
+  font-family: var(--font-body);
+  font-size: 0.9rem; color: var(--sage);
+  font-style: italic; line-height: 1.6;
+  max-width: 220px;
+}
+.footer-col-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--cream);
+  margin-bottom: 1.2rem;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-links a {
+  font-family: var(--font-label);
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  color: var(--sage); text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--mint); }
+.footer-bottom {
+  max-width: 1200px; margin: 0 auto;
+  padding-top: 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy {
+  font-family: var(--font-label);
+  font-size: 0.55rem; letter-spacing: 0.2em;
+  color: var(--fern);
+}
+.footer-values {
+  display: flex; gap: 2rem;
+}
+.footer-values span {
+  font-family: var(--font-label);
+  font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--fern);
+}
+
+/* ─── REALM DETAIL MODAL ──────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  z-index: 2000;
+  background: rgba(6,14,7,0.95);
+  backdrop-filter: blur(20px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  max-width: 600px; width: 90%;
+  border: 1px solid rgba(122,184,127,0.2);
+  background: var(--canopy);
+  padding: 3rem;
+  transform: translateY(30px) scale(0.96);
+  transition: transform 0.4s;
+  position: relative;
+}
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-close {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: none; border: none;
+  color: var(--sage); font-size: 1.2rem;
+  cursor: none; transition: color 0.3s;
+}
+.modal-close:hover { color: var(--cream); }
+.modal-tag {
+  font-family: var(--font-label);
+  font-size: 0.5rem; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--sage);
+  display: block; margin-bottom: 1rem;
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem; font-weight: 700;
+  letter-spacing: 0.08em; color: var(--cream);
+  margin-bottom: 1rem; line-height: 1.1;
+}
+.modal-divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, var(--sage), transparent);
+  margin: 1.5rem 0;
+}
+.modal-body {
+  font-family: var(--font-body);
+  font-size: 1rem; color: var(--mist);
+  line-height: 1.8; font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+.modal-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; margin-bottom: 2rem;
+}
+.modal-stat {
+  text-align: center; padding: 1rem;
+  border: 1px solid rgba(122,184,127,0.1);
+  background: rgba(13,26,15,0.5);
+}
+.modal-stat-val {
+  font-family: var(--font-display);
+  font-size: 1.5rem; color: var(--mint);
+  display: block; margin-bottom: 0.3rem;
+}
+.modal-stat-key {
+  font-family: var(--font-label);
+  font-size: 0.5rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--sage);
+}
+
+/* ─── SCROLL REVEAL ───────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+  .realms-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem 1.5rem 4rem;
+  }
+  .realm-card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 300px !important; }
+  .features { grid-template-columns: 1fr; gap: 4rem; }
+  .features-visual { height: 300px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+@media (max-width: 640px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .pillars-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .realms-grid { grid-template-columns: 1fr; }
+  .realm-desc { opacity: 1; transform: none; }
+  .realm-cta  { opacity: 1; transform: none; }
+  .btn-group { flex-direction: column; align-items: center; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 4 L28 14 L20 12 L12 14 Z" fill="none" stroke="#7ab87f" stroke-width="1.2"/>
+      <path d="M20 12 L20 36" stroke="#7ab87f" stroke-width="1.2"/>
+      <path d="M12 14 L8 28" stroke="#7ab87f" stroke-width="1" opacity="0.7"/>
+      <path d="M28 14 L32 28" stroke="#7ab87f" stroke-width="1" opacity="0.7"/>
+      <path d="M8 28 L20 24 L32 28" stroke="#7ab87f" stroke-width="1" opacity="0.5"/>
+    </svg>
+    <span class="nav-logo-text">FINEFIT</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#realms">Realms</a></li>
+    <li><a href="#train">Train</a></li>
+    <li><a href="#nourish">Nourish</a></li>
+    <li><a href="#journal">Journal</a></li>
+    <li><a href="#shop">Shop</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-trees"></div>
+  <div class="hero-mist"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Strengthen Your Body · Nourish Your Nature</span>
+    <h1 class="hero-title">FINEFIT</h1>
+    <p class="hero-sub">Where discipline is rooted in nature,<br>and power comes from within.</p>
+    <p class="hero-tagline">Train · Nourish · Focus · Grow</p>
+    <a href="#realms" class="btn">
+      Enter the Realms <span class="btn-arrow">→</span>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Descend
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <div class="pillars-grid">
+    <div class="pillar reveal">
+      <div class="pillar-icon">🌿</div>
+      <div class="pillar-name">Move</div>
+      <div class="pillar-desc">Train with purpose</div>
+    </div>
+    <div class="pillar reveal reveal-delay-1">
+      <div class="pillar-icon">🍃</div>
+      <div class="pillar-name">Nourish</div>
+      <div class="pillar-desc">Fuel naturally</div>
+    </div>
+    <div class="pillar reveal reveal-delay-2">
+      <div class="pillar-icon">🌙</div>
+      <div class="pillar-name">Restore</div>
+      <div class="pillar-desc">Recharge deeply</div>
+    </div>
+    <div class="pillar reveal reveal-delay-3">
+      <div class="pillar-icon">🌳</div>
+      <div class="pillar-name">Thrive</div>
+      <div class="pillar-desc">Live fully</div>
+    </div>
+  </div>
+</section>
+
+<!-- REALMS INTRO -->
+<section class="realms-intro" id="realms">
+  <span class="section-label reveal">The Path of Balance</span>
+  <h2 class="section-title reveal">Choose Your Realm</h2>
+  <p class="section-body reveal">Eight worlds await. Each environment holds ancient wisdom, unique trials,<br>and a path forged for a different kind of warrior.</p>
+</section>
+
+<!-- REALMS GRID -->
+<div class="realms-grid">
+
+  <!-- 1. Cherry Forest -->
+  <div class="realm-card realm-1" onclick="openModal('cherry')">
+    <div class="realm-bg"></div>
+    <div class="realm-1-petals"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">🌸</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm I</span>
+      <h3 class="realm-name">Cherry Forest</h3>
+      <p class="realm-desc">Like the cherry tree, you too must grow through every season. Discipline blooms in the quietest moments.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('cherry')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 2. Emerald Peaks -->
+  <div class="realm-card realm-2" onclick="openModal('emerald')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">⛰️</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm II</span>
+      <h3 class="realm-name">Emerald Peaks</h3>
+      <p class="realm-desc">Elevate naturally. The summit is built from ten thousand quiet mornings.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('emerald')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 3. Stormfall Cliffs -->
+  <div class="realm-card realm-3" onclick="openModal('storm')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">⚡</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm III</span>
+      <h3 class="realm-name">Stormfall Cliffs</h3>
+      <p class="realm-desc">Stand at the edge of your limits. The storm makes the roots grow deeper.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('storm')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 4. Dreaming Grove -->
+  <div class="realm-card realm-4" onclick="openModal('dream')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">✨</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm IV</span>
+      <h3 class="realm-name">Dreaming Grove</h3>
+      <p class="realm-desc">The mind is the most untamed wilderness. Master within, conquer all beyond.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('dream')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 5. Volcanic Shrine -->
+  <div class="realm-card realm-5" onclick="openModal('volcano')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">🔥</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm V</span>
+      <h3 class="realm-name">Volcanic Shrine</h3>
+      <p class="realm-desc">Forged in ancient heat. The most powerful things emerge from the deepest pressure.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('volcano')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 6. Crystal Depths -->
+  <div class="realm-card realm-6" onclick="openModal('crystal')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">💧</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm VI</span>
+      <h3 class="realm-name">Crystal Depths</h3>
+      <p class="realm-desc">Beneath the surface lies clarity. Recovery is not retreat — it is the source of all power.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('crystal')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 7. Whispering Dunes -->
+  <div class="realm-card realm-7" onclick="openModal('dunes')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">🌾</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm VII</span>
+      <h3 class="realm-name">Whispering Dunes</h3>
+      <p class="realm-desc">Ancient winds carry the wisdom of those who endured. Patience is its own strength.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('dunes')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- 8. Moonveil Highlands -->
+  <div class="realm-card realm-8" onclick="openModal('moon')">
+    <div class="realm-bg"></div>
+    <div class="realm-overlay"></div>
+    <div class="realm-icon">🌕</div>
+    <div class="realm-content">
+      <span class="realm-tag">Realm VIII</span>
+      <h3 class="realm-name">Moonveil Highlands</h3>
+      <p class="realm-desc">Where the sky meets the summit. Legacy is written not in days, but in decades of devotion.</p>
+      <a href="#" class="realm-cta" onclick="event.preventDefault(); openModal('moon')">Enter Realm <span class="realm-cta-arrow">→</span></a>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUOTE -->
+<section class="quote-break">
+  <blockquote class="quote-text reveal">
+    "The forest holds secrets. The path reveals you."
+  </blockquote>
+  <cite class="quote-attr reveal">— FineFit Codex, Volume I</cite>
+  <span class="quote-ornament reveal"></span>
+</section>
+
+<!-- FEATURES -->
+<div class="features" id="train">
+  <div class="features-visual">
+    <div class="features-circle"></div>
+    <div class="features-circle"></div>
+    <div class="features-circle"></div>
+    <div class="features-dots">
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+      <div class="feat-dot"></div>
+    </div>
+    <div class="features-center">
+      <span class="features-center-icon">🌿</span>
+    </div>
+  </div>
+  <div class="features-text">
+    <div>
+      <span class="section-label reveal">Built By Nature</span>
+      <h2 class="section-title reveal">Refined By<br>Discipline</h2>
+    </div>
+    <div class="feature-item reveal">
+      <span class="feature-num">01</span>
+      <div>
+        <div class="feature-title">Strength — Train with Intention</div>
+        <p class="feature-body">Every program is designed around the rhythms of nature. Progressive, purposeful, and perfectly balanced to grow you through every season.</p>
+      </div>
+    </div>
+    <div class="feature-item reveal reveal-delay-1">
+      <span class="feature-num">02</span>
+      <div>
+        <div class="feature-title">Vitality — Eat for Energy</div>
+        <p class="feature-body">Pure ingredients sourced from the earth. Nutrition that honours the body as the most sophisticated organism on the planet.</p>
+      </div>
+    </div>
+    <div class="feature-item reveal reveal-delay-2">
+      <span class="feature-num">03</span>
+      <div>
+        <div class="feature-title">Legacy — Inspire Beyond</div>
+        <p class="feature-body">You are not training for today. You are building a foundation that will outlast you, inspire those around you, and echo through time.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg-rings">
+    <div class="cta-ring"></div>
+    <div class="cta-ring"></div>
+    <div class="cta-ring"></div>
+    <div class="cta-ring"></div>
+  </div>
+  <div class="cta-content">
+    <span class="cta-eyebrow reveal">Your Journey Begins</span>
+    <h2 class="cta-title reveal">Awaken Your</h2>
+    <h2 class="cta-subtitle reveal">Inner Legend</h2>
+    <p class="cta-body reveal">Transform in the wild. Thrive in any world.<br>One nature. Unstoppable within.</p>
+    <div class="btn-group reveal">
+      <a href="#" class="btn btn-primary">Begin Your Journey <span class="btn-arrow">→</span></a>
+      <a href="#realms" class="btn btn-ghost">Explore Realms</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
+          <path d="M20 4 L28 14 L20 12 L12 14 Z" fill="none" stroke="#4a7c52" stroke-width="1.2"/>
+          <path d="M20 12 L20 36" stroke="#4a7c52" stroke-width="1.2"/>
+          <path d="M12 14 L8 28" stroke="#4a7c52" stroke-width="1" opacity="0.7"/>
+          <path d="M28 14 L32 28" stroke="#4a7c52" stroke-width="1" opacity="0.7"/>
+          <path d="M8 28 L20 24 L32 28" stroke="#4a7c52" stroke-width="1" opacity="0.5"/>
+        </svg>
+        <span class="nav-logo-text" style="font-size:0.9rem">FINEFIT</span>
+      </a>
+      <p class="footer-tagline">Nature inspires.<br>We transform.<br>One with nature, unstoppable within.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Realms</div>
+      <ul class="footer-links">
+        <li><a href="#">Cherry Forest</a></li>
+        <li><a href="#">Emerald Peaks</a></li>
+        <li><a href="#">Stormfall Cliffs</a></li>
+        <li><a href="#">Dreaming Grove</a></li>
+        <li><a href="#">Volcanic Shrine</a></li>
+        <li><a href="#">Crystal Depths</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Programs</div>
+      <ul class="footer-links">
+        <li><a href="#">Train</a></li>
+        <li><a href="#">Nourish</a></li>
+        <li><a href="#">Restore</a></li>
+        <li><a href="#">Coaching</a></li>
+        <li><a href="#">Journal</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Philosophy</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 FineFit. All rights reserved. Sustainable · Natural · Balanced.</span>
+    <div class="footer-values">
+      <span>Sustainable</span>
+      <span>Natural</span>
+      <span>Balanced</span>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="modal-tag" id="modalTag"></span>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <div class="modal-divider"></div>
+    <p class="modal-body" id="modalBody"></p>
+    <div class="modal-stats" id="modalStats"></div>
+    <a href="#" class="btn" style="animation:none">Begin This Path <span class="btn-arrow">→</span></a>
+  </div>
+</div>
+
+<script>
+/* ── Cursor ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a, button, .realm-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.width = '52px'; ring.style.height = '52px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '36px'; ring.style.height = '36px';
+  });
+});
+
+/* ── Nav scroll ── */
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ── Particles ── */
+const pCont = document.getElementById('particles');
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left     = Math.random() * 100 + '%';
+  p.style.width    = (Math.random() * 2 + 1) + 'px';
+  p.style.height   = p.style.width;
+  p.style.animationDuration  = (Math.random() * 15 + 10) + 's';
+  p.style.animationDelay     = (Math.random() * -20) + 's';
+  p.style.opacity  = Math.random() * 0.6 + 0.2;
+  pCont.appendChild(p);
+}
+
+/* ── Scroll reveal ── */
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => observer.observe(el));
+
+/* ── Modal data ── */
+const realms = {
+  cherry: {
+    tag: 'Realm I — Cherry Forest',
+    title: 'Cherry Forest',
+    body: 'In the Cherry Forest, every petal that falls is a reminder that beauty and strength coexist. This realm is dedicated to grace, endurance, and the discipline to grow through every season. Train in the rhythm of nature — bloom, prune, and bloom again. Programs here focus on mobility, active recovery, and the mindful connection between movement and breath.',
+    stats: [['Intensity','Moderate'], ['Focus','Endurance'], ['Season','Spring']],
+  },
+  emerald: {
+    tag: 'Realm II — Emerald Peaks',
+    title: 'Emerald Peaks',
+    body: 'The Emerald Peaks rise above the clouds where the air is pure and the view infinite. This is where strength is built — not quickly, but correctly. Altitude demands adaptation. Each ascent reshapes you. Programs here focus on progressive strength training, compound lifts, and building the physical foundation that will carry you through all other realms.',
+    stats: [['Intensity','High'], ['Focus','Strength'], ['Season','Summer']],
+  },
+  storm: {
+    tag: 'Realm III — Stormfall Cliffs',
+    title: 'Stormfall Cliffs',
+    body: 'At the Stormfall Cliffs, the wind does not break you — it tests you. This is the realm of adversity and resilience. Training here is raw and powerful: HIIT, plyometrics, and conditioning that pushes your threshold further every session. The storm is the teacher. Stand in it long enough and you become unbreakable.',
+    stats: [['Intensity','Extreme'], ['Focus','Power'], ['Season','Autumn']],
+  },
+  dream: {
+    tag: 'Realm IV — Dreaming Grove',
+    title: 'Dreaming Grove',
+    body: 'The Dreaming Grove is lit by bioluminescent moss and ancient stars. Here the mind is trained as rigorously as the body. Meditation, visualization, breathwork, and sleep optimization are the disciplines of this realm. Warriors who master the Dreaming Grove find that the inner world determines the outer one. Mindset is the final frontier.',
+    stats: [['Intensity','Low'], ['Focus','Mindset'], ['Season','All Seasons']],
+  },
+  volcano: {
+    tag: 'Realm V — Volcanic Shrine',
+    title: 'Volcanic Shrine',
+    body: 'The Volcanic Shrine burns at the intersection of will and fire. Nothing enters unchanged. This is where metabolic conditioning lives — circuits, complexes, and functional intensity that reshape your physiology from the inside out. The ancient shrine demands total commitment. What you sacrifice here, you reclaim as power.',
+    stats: [['Intensity','Very High'], ['Focus','Conditioning'], ['Season','All Year']],
+  },
+  crystal: {
+    tag: 'Realm VI — Crystal Depths',
+    title: 'Crystal Depths',
+    body: 'Below the surface of Crystal Depths, time moves differently. This is the realm of recovery — cold exposure, contrast therapy, deep tissue work, and nutritional regeneration. The crystal waters do not just heal; they amplify. Warriors who respect this realm return to all others stronger, faster, and uninjured. Recovery is not rest. It is reconstruction.',
+    stats: [['Intensity','Restorative'], ['Focus','Recovery'], ['Season','Winter']],
+  },
+  dunes: {
+    tag: 'Realm VII — Whispering Dunes',
+    title: 'Whispering Dunes',
+    body: 'The Whispering Dunes stretch endlessly, shifting and silent. This is the realm of nutrition and ancient sustenance — where food is medicine and eating is ceremony. Programs here explore whole-food nutrition, adaptogens, intermittent fasting, and the sacred relationship between what we consume and who we become. Patience and precision are its virtues.',
+    stats: [['Intensity','—'], ['Focus','Nutrition'], ['Season','Year-round']],
+  },
+  moon: {
+    tag: 'Realm VIII — Moonveil Highlands',
+    title: 'Moonveil Highlands',
+    body: 'At the Moonveil Highlands, you see everything from above. This is the final realm — the realm of legacy. Programs here integrate everything learned across all eight realms into a unified practice. Advanced periodization, performance tracking, and community leadership converge. You are no longer training for yourself. You are becoming the inspiration for others.',
+    stats: [['Intensity','Variable'], ['Focus','Legacy'], ['Season','Timeless']],
+  },
+};
+
+function openModal(key) {
+  const d = realms[key];
+  if (!d) return;
+  document.getElementById('modalTag').textContent   = d.tag;
+  document.getElementById('modalTitle').textContent = d.title;
+  document.getElementById('modalBody').textContent  = d.body;
+  document.getElementById('modalStats').innerHTML   = d.stats.map(([k,v]) =>
+    `<div class="modal-stat"><span class="modal-stat-val">${v}</span><span class="modal-stat-key">${k}</span></div>`
+  ).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; } });
+</script>
+</body>
+</html>
