@@ -14,7 +14,11 @@
   </url>
 
   <url>
-    <loc>https://finefit.dev/games</loc>
+    <loc>https://finefit.dev/apps</loc>
+  </url>
+
+  <url>
+    <loc>https://finefit.dev/store</loc>
   </url>
 
 </urlset>

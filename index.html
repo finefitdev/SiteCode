@@ -726,118 +726,445 @@
       }
     }
 
-    /* Games */
-    .games-list {
+    /* Apps */
+    .apps-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .game-tab {
-      border: 1px solid var(--line-2);
-      background: rgba(255, 255, 255, 0.02);
-      padding: 0.85rem 1.5rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-family: 'Unbounded', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--fg);
-      text-shadow: var(--glow-soft);
-      width: fit-content;
-    }
-
-    .game-tab::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--fg);
-      box-shadow: var(--glow-soft);
-      border-radius: 50%;
-    }
-
-    .game-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 1.5rem;
     }
 
-    .game-info {
-      display: flex;
-      gap: 3.5rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--dim);
-    }
-
-    .game-info b {
-      font-weight: 500;
-      color: var(--fg);
-      text-shadow: var(--glow-soft);
-      margin-left: 0.5rem;
-      font-family: 'Unbounded', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-    }
-
-    .canvas-frame {
-      padding: 0.75rem;
-      border: 1px solid var(--line-2);
+    .app-card {
+      border: 1px solid var(--line);
       background: rgba(255, 255, 255, 0.015);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: var(--fg);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .app-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .app-card:hover {
+      border-color: var(--line-2);
+      background: rgba(255, 255, 255, 0.025);
+      transform: translateY(-3px);
       box-shadow: var(--glow-soft);
+    }
+
+    .app-card:hover::before {
+      opacity: 1;
+    }
+
+    .app-cover {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: var(--bg-2);
+      margin-bottom: 1.25rem;
       position: relative;
     }
 
-    .canvas-frame::before,
-    .canvas-frame::after {
-      content: '';
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-color: var(--fg);
-      border-style: solid;
+    .app-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9);
+      transition: filter 0.3s ease;
     }
 
-    .canvas-frame::before {
-      top: -1px;
-      left: -1px;
-      border-width: 1px 0 0 1px;
+    .app-card:hover .app-cover img {
+      filter: brightness(1);
     }
 
-    .canvas-frame::after {
-      bottom: -1px;
-      right: -1px;
-      border-width: 0 1px 1px 0;
+    .app-cover.placeholder {
+      display: grid;
+      place-items: center;
     }
 
-    #snake-canvas {
-      background: var(--bg-2);
-      display: block;
-      max-width: 100%;
-      image-rendering: pixelated;
-    }
-
-    .game-instructions {
-      color: var(--dim);
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-align: center;
+    .app-cover.placeholder span {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      color: var(--dimmer);
+      text-shadow: var(--glow-soft);
     }
 
-    .game-instructions kbd {
+    .app-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .app-badge {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
       border: 1px solid var(--line-2);
-      padding: 0.15rem 0.45rem;
-      border-radius: 3px;
+      padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+    }
+
+    .app-badge.soon {
+      color: #f0c85c;
+      border-color: rgba(240, 200, 92, 0.4);
+    }
+
+    .app-badge.live {
+      color: #5cf08e;
+      border-color: rgba(92, 240, 142, 0.4);
+    }
+
+    .app-card h3 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 500;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.35rem;
+    }
+
+    .app-card .app-desc {
+      color: var(--dim);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      margin-bottom: 1.1rem;
+      flex: 1;
+    }
+
+    .app-card .project-tags {
+      margin-bottom: 0.85rem;
+    }
+
+    .app-cta {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+      transition: color 0.4s ease, text-shadow 0.4s ease;
+    }
+
+    .app-cta .arrow {
+      transition: transform 0.4s ease;
+    }
+
+    .app-card:hover .app-cta {
+      color: var(--fg);
+      text-shadow: var(--glow-soft);
+    }
+
+    .app-card:hover .app-cta .arrow {
+      transform: translateX(8px);
+    }
+
+    .app-cta.muted {
+      color: var(--dimmer);
+    }
+
+    /* Home sections (scroll targets under fixed header) */
+    .home-section {
+      scroll-margin-top: 4.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      color: var(--dimmer);
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.7rem;
-      margin: 0 0.15rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .scroll-cue:hover {
       color: var(--fg);
+      text-shadow: var(--glow-soft);
+    }
+
+    .scroll-cue .chev {
+      font-size: 1rem;
+      animation: bob 2s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: translateY(5px);
+        opacity: 1;
+      }
+    }
+
+    /* Store */
+    .store-banner {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.015);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      width: fit-content;
+    }
+
+    .store-banner .dot-soon {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #f0c85c;
+      box-shadow: 0 0 8px rgba(240, 200, 92, 0.7);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .store-card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.015);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: var(--fg);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .store-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .store-card:hover {
+      border-color: var(--line-2);
+      background: rgba(255, 255, 255, 0.025);
+      transform: translateY(-3px);
+      box-shadow: var(--glow-soft);
+    }
+
+    .store-card:hover::before {
+      opacity: 1;
+    }
+
+    .store-card .store-kind {
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dimmer);
+      margin-bottom: 0.85rem;
+    }
+
+    .store-card h3 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 500;
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+    }
+
+    .store-card .store-desc {
+      color: var(--dim);
+      font-size: 0.78rem;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+
+    .store-card .store-cta {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--line);
+      transition: color 0.4s ease, text-shadow 0.4s ease;
+    }
+
+    .store-card .store-cta .arrow {
+      transition: transform 0.4s ease;
+    }
+
+    .store-card:hover .store-cta {
+      color: var(--fg);
+      text-shadow: var(--glow-soft);
+    }
+
+    .store-card:hover .store-cta .arrow {
+      transform: translateX(8px);
+    }
+
+    .store-section-title {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-shadow: var(--glow-soft);
+      margin: 3.5rem 0 1.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .store-section-title:first-of-type {
+      margin-top: 2.5rem;
+    }
+
+    .store-cover {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: var(--bg-2);
+      margin-bottom: 1.25rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .store-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9);
+      transition: filter 0.3s ease;
+    }
+
+    .store-card:hover .store-cover img {
+      filter: brightness(1);
+    }
+
+    .store-cover .cover-label {
+      display: none;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dimmer);
+      text-shadow: var(--glow-soft);
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .store-cover.is-empty img {
+      display: none;
+    }
+
+    .store-cover.is-empty .cover-label {
+      display: block;
+    }
+
+    .cloth-colors {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .color-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--line-2);
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+      transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .color-chip:hover {
+      color: var(--fg);
+      border-color: var(--line-2);
+    }
+
+    .color-chip.active {
+      color: var(--fg);
+      border-color: var(--fg);
+      box-shadow: var(--glow-soft);
+      text-shadow: var(--glow-soft);
+    }
+
+    .cloth-sizes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .size-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--fg);
+      text-decoration: none;
+      border: 1px solid var(--line-2);
+      padding: 0.5rem 0.85rem;
+      min-width: 2.6rem;
+      text-align: center;
+      transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .size-btn:hover {
+      border-color: var(--fg);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: var(--glow-soft);
+      text-shadow: var(--glow-soft);
     }
 
     /* Responsive */
@@ -881,10 +1208,6 @@
         margin-top: 0.25rem;
       }
 
-      .game-info {
-        gap: 1.75rem;
-      }
-
       .modal-nav.prev {
         left: 0.5rem;
       }
@@ -904,9 +1227,10 @@
       <span>FINEFIT</span>
     </a>
     <nav id="nav">
-      <a href="/projects" data-link>Projects</a>
-      <a href="/socials" data-link>Socials</a>
-      <a href="/games" data-link>Games</a>
+      <a href="/#projects" data-scroll="projects">Projects</a>
+      <a href="/#socials" data-scroll="socials">Socials</a>
+      <a href="/apps" data-link>Apps</a>
+      <a href="/store" data-link>Store</a>
     </nav>
   </header>
 
@@ -967,15 +1291,80 @@
       { name: 'Discord', handle: 'finefit', url: 'https://discord.com/' },
     ];
 
+    const CHECKOUT = 'https://finefit-shop.fourthwall.com/cart/checkout?products=';
+
+    const stickers = [
+      { title: 'Bass Xanthic', desc: 'Xanthic bass print. 3" × 3" sticker.', image: 'images/sticker-bass-xanthic.png', url: CHECKOUT + 'e06e04e4-9bfe-4b28-bfa2-591b0e28694b' },
+      { title: 'Marsh Gar', desc: 'Marsh gar print. 3" × 3" sticker.', image: 'images/sticker-marsh-gar.png', url: CHECKOUT + 'ba1b882f-7254-47e8-a0ea-a3f0914ed3a0' },
+      { title: 'Sunscale', desc: 'Sunscale print. 3" × 3" sticker.', image: 'images/sticker-sunscale.png', url: CHECKOUT + 'f33c2216-4ae9-4349-a94f-a1498dafd066' },
+      { title: 'Rift Eel', desc: 'Rift eel print. 3" × 3" sticker.', image: 'images/sticker-rift-eel.png', url: CHECKOUT + '932975ac-9fc8-4f7f-a91a-e12ad37a9c1e' },
+      { title: 'Carp Calico', desc: 'Calico carp print. 3" × 3" sticker.', image: 'images/sticker-carp-calico.png', url: CHECKOUT + 'b4ec499f-96ab-4546-b674-282b3afd29d4' },
+    ];
+
+    const clothing = [
+      {
+        title: 'One Last Cast Tee',
+        desc: 'Soft cotton tee with the One Last Cast print. Pick a color and size to buy direct, or view every option on the product page.',
+        productUrl: 'https://finefit-shop.fourthwall.com/products/one-last-cast-tee',
+        colors: [
+          {
+            name: 'Black',
+            image: 'images/tee-black.png',
+            sizes: [
+              ['S', CHECKOUT + 'eaecc5a0-1706-4879-bb27-d5198325a3a7'],
+              ['M', CHECKOUT + '27b98161-f213-4e1b-865e-555e95800da8'],
+              ['L', CHECKOUT + '309e83da-8dae-4593-bcbe-4d60070be118'],
+              ['XL', CHECKOUT + '7bec3673-9cce-4228-90d0-3aa10cb842ce'],
+            ],
+          },
+          {
+            name: 'Navy',
+            image: 'images/tee-navy.png',
+            sizes: [
+              ['S', CHECKOUT + 'baf74a9b-442d-46ec-97d2-a864713464ca'],
+              ['M', CHECKOUT + '6f65ce81-9058-4110-a928-e8d6ce1b941f'],
+              ['L', CHECKOUT + 'a26dee5b-33bc-452d-b73d-ee722e2a1ef8'],
+              ['XL', CHECKOUT + '91e836b9-428b-422c-acc1-67781a34b7bf'],
+            ],
+          },
+        ],
+      },
+    ];
+
+    const apps = [
+      {
+        title: 'One Last Cast',
+        badge: 'In Development',
+        badgeClass: 'soon',
+        desc: 'A mobile fishing roguelike built in Godot. Cast, hook, and fight your catch — chase rarer fish and push your luck for one last cast each run.',
+        tags: ['Godot 4', 'GDScript', 'Mobile'],
+        image: null,
+        url: null,
+        cta: 'Coming Soon',
+      },
+      {
+        title: 'SpeakMyChat',
+        badge: 'Open Source',
+        badgeClass: 'live',
+        desc: 'Reads your Twitch chat out loud — type a channel, hit Connect, done. No login, no token, no setup. Piper TTS voices, keyword sound triggers, and content filtering all built in.',
+        tags: ['Python', 'Piper TTS', 'Twitch'],
+        image: 'https://raw.githubusercontent.com/finefitdev/SpeakMyChat/main/example/example1.png',
+        url: 'https://github.com/finefitdev/SpeakMyChat',
+        cta: 'View on GitHub',
+      },
+    ];
+
     // Per-project carousel state
     const carouselIdx = {};
 
     // ---------- Routing ----------
     const routes = {
-      '/': renderHome,
-      '/projects': renderProjects,
-      '/socials': renderSocials,
-      '/games': renderGames,
+      '/': (root) => renderHome(root),
+      '/projects': (root) => renderHome(root, 'projects'),
+      '/socials': (root) => renderHome(root, 'socials'),
+      '/apps': renderApps,
+      '/games': renderApps,
+      '/store': renderStore,
     };
 
     const getPath = () => window.location.pathname || '/';
@@ -991,11 +1380,31 @@
     window.addEventListener('popstate', () => render(getPath()));
 
     document.addEventListener('click', (e) => {
+      const scrollLink = e.target.closest('[data-scroll]');
+      if (scrollLink) {
+        e.preventDefault();
+        goToSection(scrollLink.getAttribute('data-scroll'));
+        return;
+      }
       const a = e.target.closest('a[data-link]');
       if (!a) return;
       e.preventDefault();
       navigate(a.getAttribute('href'));
     });
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function goToSection(id) {
+      if (getPath() === '/' || getPath() === '/projects' || getPath() === '/socials') {
+        scrollToSection(id);
+      } else {
+        navigate('/');
+        requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(id)));
+      }
+    }
 
     function render(path) {
       path = path || window.__finefitPath || getPath();
@@ -1013,31 +1422,44 @@
         '/': 'Finefit',
         '/projects': 'Projects · Finefit',
         '/socials': 'Socials · Finefit',
-        '/games': 'Games · Finefit',
+        '/apps': 'Apps · Finefit',
+        '/games': 'Apps · Finefit',
+        '/store': 'Store · Finefit',
       };
       document.title = titles[path] || 'Finefit';
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     function teardown() {
-      if (window._snake?.stop) window._snake.stop();
+      if (window._spy?.disconnect) { window._spy.disconnect(); window._spy = null; }
     }
 
     // ---------- Pages ----------
-    function renderHome(root) {
+    function renderHome(root, scrollTarget) {
       root.innerHTML = `
         <section class="home">
           <h1>Welcome</h1>
           <p class="sub">Self-taught developer. Shipping code since 2019, working with what I can teach myself.</p>
           <p class="tag">Look around</p>
-          <p class="hint">.... or pick a tab</p>
+          <button class="scroll-cue" data-scroll="projects" aria-label="Scroll to projects">
+            <span>Scroll</span>
+            <span class="chev">▼</span>
+          </button>
         </section>
+        ${projectsSection()}
+        ${socialsSection()}
       `;
+      projects.forEach((_, i) => (carouselIdx[i] = 0));
+      bindCarousels();
+      initScrollSpy();
+      if (scrollTarget) {
+        requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(scrollTarget)));
+      }
     }
 
-    function renderProjects(root) {
-      root.innerHTML = `
-        <section class="page">
+    function projectsSection() {
+      return `
+        <section class="page home-section" id="projects">
           <div class="page-meta"><span>/ projects</span></div>
           <h2 class="page-title">Projects</h2>
           <p class="page-lede">A rough timeline of what I've built and where my time went. Some shipped to the public, some lived in evenings between shifts. Either way, this is the work.</p>
@@ -1046,8 +1468,25 @@
           </div>
         </section>
       `;
-      projects.forEach((_, i) => (carouselIdx[i] = 0));
-      bindCarousels();
+    }
+
+    function initScrollSpy() {
+      const ids = ['projects', 'socials'];
+      const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
+      if (!sections.length) return;
+      const links = {};
+      ids.forEach((id) => { links[id] = document.querySelector(`#nav a[data-scroll="${id}"]`); });
+
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          Object.values(links).forEach((l) => l && l.classList.remove('active'));
+          links[entry.target.id]?.classList.add('active');
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+      sections.forEach((s) => obs.observe(s));
+      window._spy = obs;
     }
 
     function projectCard(p, i) {
@@ -1128,9 +1567,9 @@
       if (counter) counter.textContent = `${j + 1} / ${total}`;
     }
 
-    function renderSocials(root) {
-      root.innerHTML = `
-        <section class="page">
+    function socialsSection() {
+      return `
+        <section class="page home-section" id="socials">
           <div class="page-meta"><span>/ socials</span></div>
           <h2 class="page-title">Socials</h2>
           <p class="page-lede">The fastest ways to reach me. Email's best for anything work-related.</p>
@@ -1153,30 +1592,127 @@
       `;
     }
 
-    function renderGames(root) {
+    function renderStore(root) {
       root.innerHTML = `
         <section class="page">
-          <div class="page-meta"><span>/ games</span></div>
-          <h2 class="page-title">Games</h2>
-          <p class="page-lede">A break from the resume. Built from scratch — vanilla canvas, no libraries.</p>
-          <div class="games-list">
-            <div class="game-tab">Snake · Now Playing</div>
+          <div class="page-meta"><span>/ store</span></div>
+          <h2 class="page-title">Store</h2>
+          <p class="page-lede">Original fish artwork and apparel. More categories landing over time.</p>
+          <div class="store-banner">
+            <span class="dot-soon"></span>
+            <span>Coming Soon · links go live at launch</span>
           </div>
-          <div class="game-container">
-            <div class="game-info">
-              <div>Score<b id="snake-score">0</b></div>
-              <div>Best<b id="snake-best">0</b></div>
-            </div>
-            <div class="canvas-frame">
-              <canvas id="snake-canvas" width="440" height="440" aria-label="Snake game"></canvas>
-            </div>
-            <p class="game-instructions">
-              <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> or <kbd>WASD</kbd> to move &nbsp;·&nbsp; <kbd>space</kbd> to restart
-            </p>
+
+          <h3 class="store-section-title">Stickers</h3>
+          <div class="store-grid">
+            ${stickers.map(stickerCard).join('')}
+          </div>
+
+          <h3 class="store-section-title">Clothing</h3>
+          <div class="store-grid">
+            ${clothing.map(clothingCard).join('')}
           </div>
         </section>
       `;
-      initSnake();
+      bindClothing();
+    }
+
+    function coverHtml(image, label) {
+      return `
+        <div class="store-cover">
+          <img src="${image}" alt="${label}" loading="lazy"
+            onerror="this.closest('.store-cover').classList.add('is-empty');">
+          <span class="cover-label">${label}</span>
+        </div>
+      `;
+    }
+
+    function stickerCard(s) {
+      return `
+        <a class="store-card" href="${s.url}" target="_blank" rel="noopener">
+          ${coverHtml(s.image, s.title)}
+          <span class="store-kind">Sticker</span>
+          <h3>${s.title}</h3>
+          <p class="store-desc">${s.desc}</p>
+          <span class="store-cta">Buy <span class="arrow">→</span></span>
+        </a>
+      `;
+    }
+
+    function clothingCard(item, i) {
+      const c0 = item.colors[0];
+      const chips = item.colors.map((c, k) =>
+        `<button class="color-chip ${k === 0 ? 'active' : ''}" data-color="${k}">${c.name}</button>`
+      ).join('');
+      const sizes = c0.sizes.map(([size, url]) =>
+        `<a class="size-btn" href="${url}" target="_blank" rel="noopener">${size}</a>`
+      ).join('');
+      return `
+        <article class="store-card" data-cloth="${i}">
+          ${coverHtml(c0.image, item.title + ' · ' + c0.name)}
+          <span class="store-kind">Apparel</span>
+          <h3>${item.title}</h3>
+          <p class="store-desc">${item.desc}</p>
+          <div class="cloth-colors">${chips}</div>
+          <div class="cloth-sizes">${sizes}</div>
+          <a class="store-cta" href="${item.productUrl}" target="_blank" rel="noopener">View all options <span class="arrow">→</span></a>
+        </article>
+      `;
+    }
+
+    function bindClothing() {
+      document.querySelectorAll('[data-cloth]').forEach((card) => {
+        const item = clothing[+card.dataset.cloth];
+        card.querySelectorAll('.color-chip').forEach((chip) => {
+          chip.addEventListener('click', () => setClothColor(card, item, +chip.dataset.color));
+        });
+      });
+    }
+
+    function setClothColor(card, item, ci) {
+      const color = item.colors[ci];
+      card.querySelectorAll('.color-chip').forEach((c, k) => c.classList.toggle('active', k === ci));
+      const cover = card.querySelector('.store-cover');
+      cover.classList.remove('is-empty');
+      const img = cover.querySelector('img');
+      img.src = color.image;
+      cover.querySelector('.cover-label').textContent = `${item.title} · ${color.name}`;
+      card.querySelectorAll('.size-btn').forEach((btn, k) => {
+        btn.href = color.sizes[k][1];
+      });
+    }
+
+    function renderApps(root) {
+      root.innerHTML = `
+        <section class="page">
+          <div class="page-meta"><span>/ apps</span></div>
+          <h2 class="page-title">Apps</h2>
+          <p class="page-lede">Things I'm building and shipping — from a fishing game to open-source tools anyone can run.</p>
+          <div class="apps-grid">
+            ${apps.map(appCard).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    function appCard(a) {
+      const cover = a.image
+        ? `<div class="app-cover"><img src="${a.image}" alt="${a.title} screenshot" loading="lazy"></div>`
+        : `<div class="app-cover placeholder"><span>${a.title}</span></div>`;
+      const tag = a.url ? 'a' : 'div';
+      const attrs = a.url ? `href="${a.url}" target="_blank" rel="noopener"` : '';
+      return `
+        <${tag} class="app-card" ${attrs}>
+          ${cover}
+          <div class="app-head">
+            <h3>${a.title}</h3>
+            <span class="app-badge ${a.badgeClass}">${a.badge}</span>
+          </div>
+          <p class="app-desc">${a.desc}</p>
+          <div class="project-tags">${a.tags.map((t) => `<span class="tag">${t}</span>`).join('')}</div>
+          <span class="app-cta ${a.url ? '' : 'muted'}">${a.cta}${a.url ? ' <span class="arrow">→</span>' : ''}</span>
+        </${tag}>
+      `;
     }
 
     function render404(root) {
@@ -1244,159 +1780,6 @@
       else if (e.key === 'ArrowLeft') modalStep(-1);
       else if (e.key === 'ArrowRight') modalStep(1);
     });
-
-    // ---------- Snake ----------
-    function initSnake() {
-      const canvas = document.getElementById('snake-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const gridSize = 22;
-      const cellSize = canvas.width / gridSize;
-
-      let snake, dir, nextDir, food, score, gameOver, lastStep, speed, running;
-      let best = 0;
-      const bestEl = document.getElementById('snake-best');
-      const scoreEl = document.getElementById('snake-score');
-      bestEl.textContent = best;
-
-      function reset() {
-        snake = [{ x: 11, y: 11 }, { x: 10, y: 11 }, { x: 9, y: 11 }];
-        dir = { x: 1, y: 0 };
-        nextDir = { x: 1, y: 0 };
-        score = 0;
-        gameOver = false;
-        speed = 130;
-        placeFood();
-        updateScore();
-      }
-
-      function placeFood() {
-        while (true) {
-          food = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
-          if (!snake.some(s => s.x === food.x && s.y === food.y)) break;
-        }
-      }
-
-      function updateScore() {
-        scoreEl.textContent = score;
-        if (score > best) { best = score; bestEl.textContent = best; }
-      }
-
-      function step() {
-        if (gameOver) return;
-        dir = nextDir;
-        const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-        if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize
-          || snake.some(s => s.x === head.x && s.y === head.y)) {
-          gameOver = true;
-          draw();
-          return;
-        }
-        snake.unshift(head);
-        if (head.x === food.x && head.y === food.y) {
-          score++;
-          updateScore();
-          placeFood();
-          if (speed > 65) speed -= 2.5;
-        } else {
-          snake.pop();
-        }
-        draw();
-      }
-
-      function draw() {
-        ctx.fillStyle = '#0a0a0a';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-        ctx.lineWidth = 1;
-        for (let i = 1; i < gridSize; i++) {
-          ctx.beginPath();
-          ctx.moveTo(i * cellSize + 0.5, 0);
-          ctx.lineTo(i * cellSize + 0.5, canvas.height);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(0, i * cellSize + 0.5);
-          ctx.lineTo(canvas.width, i * cellSize + 0.5);
-          ctx.stroke();
-        }
-
-        ctx.shadowBlur = 22;
-        ctx.shadowColor = 'rgba(255,255,255,0.9)';
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(food.x * cellSize + cellSize / 2, food.y * cellSize + cellSize / 2, cellSize / 3.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        snake.forEach((s, i) => {
-          const isHead = i === 0;
-          ctx.shadowBlur = isHead ? 22 : 10;
-          ctx.shadowColor = 'rgba(255,255,255,0.7)';
-          const alpha = isHead ? 1 : Math.max(0.45, 1 - (i / snake.length) * 0.55);
-          ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-          const pad = isHead ? 1 : 2;
-          ctx.fillRect(s.x * cellSize + pad, s.y * cellSize + pad, cellSize - pad * 2, cellSize - pad * 2);
-        });
-        ctx.shadowBlur = 0;
-
-        if (gameOver) {
-          ctx.fillStyle = 'rgba(0,0,0,0.72)';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.shadowBlur = 24;
-          ctx.shadowColor = 'rgba(255,255,255,0.8)';
-          ctx.fillStyle = '#ffffff';
-          ctx.textAlign = 'center';
-          ctx.font = '700 26px Unbounded, sans-serif';
-          ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 8);
-          ctx.shadowBlur = 0;
-          ctx.fillStyle = 'rgba(255,255,255,0.65)';
-          ctx.font = '11px JetBrains Mono, monospace';
-          ctx.fillText(`SCORE  ${score}      BEST  ${best}`, canvas.width / 2, canvas.height / 2 + 18);
-          ctx.fillStyle = 'rgba(255,255,255,0.45)';
-          ctx.fillText('PRESS SPACE TO RESTART', canvas.width / 2, canvas.height / 2 + 42);
-        }
-      }
-
-      function loop(t) {
-        if (!running) return;
-        if (!lastStep) lastStep = t;
-        if (t - lastStep > speed) { step(); lastStep = t; }
-        requestAnimationFrame(loop);
-      }
-
-      function onKey(e) {
-        if (getPath() !== '/games') return;
-        const k = e.key.toLowerCase();
-        const map = {
-          'arrowup': { x: 0, y: -1 },
-          'w': { x: 0, y: -1 },
-          'arrowdown': { x: 0, y: 1 },
-          's': { x: 0, y: 1 },
-          'arrowleft': { x: -1, y: 0 },
-          'a': { x: -1, y: 0 },
-          'arrowright': { x: 1, y: 0 },
-          'd': { x: 1, y: 0 },
-        };
-        if (map[k]) {
-          const nd = map[k];
-          if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
-          e.preventDefault();
-        } else if (k === ' ') {
-          if (gameOver) reset();
-          e.preventDefault();
-        }
-      }
-
-      document.addEventListener('keydown', onKey);
-      window._snake = {
-        stop() { running = false; document.removeEventListener('keydown', onKey); }
-      };
-
-      reset();
-      draw();
-      running = true;
-      requestAnimationFrame(loop);
-    }
 
     // ---------- Boot ----------
     render(getPath());
