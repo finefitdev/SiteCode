@@ -789,12 +789,17 @@
       filter: brightness(1);
     }
 
+    .app-cover span {
+      display: none;
+    }
+
     .app-cover.placeholder {
       display: grid;
       place-items: center;
     }
 
     .app-cover.placeholder span {
+      display: block;
       font-family: 'Unbounded', sans-serif;
       font-weight: 700;
       font-size: 1.5rem;
@@ -802,6 +807,8 @@
       text-transform: uppercase;
       color: var(--dimmer);
       text-shadow: var(--glow-soft);
+      text-align: center;
+      padding: 1rem;
     }
 
     .app-head {
@@ -1338,7 +1345,7 @@
         badgeClass: 'soon',
         desc: 'A mobile fishing roguelike built in Godot. Cast, hook, and fight your catch — chase rarer fish and push your luck for one last cast each run.',
         tags: ['Godot 4', 'GDScript', 'Mobile'],
-        image: null,
+        image: 'images/one-last-cast.png',
         url: null,
         cta: 'Coming Soon',
       },
@@ -1605,7 +1612,7 @@
 
           <h3 class="store-section-title">Stickers</h3>
           <div class="store-grid">
-            ${stickers.map(stickerCard).join('')}
+            ${stickerCard()}
           </div>
 
           <h3 class="store-section-title">Clothing</h3>
@@ -1614,6 +1621,7 @@
           </div>
         </section>
       `;
+      bindStickers();
       bindClothing();
     }
 
@@ -1627,16 +1635,40 @@
       `;
     }
 
-    function stickerCard(s) {
+    function stickerCard() {
+      const s0 = stickers[0];
+      const chips = stickers.map((s, k) =>
+        `<button class="color-chip ${k === 0 ? 'active' : ''}" data-sticker="${k}">${s.title}</button>`
+      ).join('');
       return `
-        <a class="store-card" href="${s.url}" target="_blank" rel="noopener">
-          ${coverHtml(s.image, s.title)}
-          <span class="store-kind">Sticker</span>
-          <h3>${s.title}</h3>
-          <p class="store-desc">${s.desc}</p>
-          <span class="store-cta">Buy <span class="arrow">→</span></span>
-        </a>
+        <article class="store-card" data-stickers>
+          ${coverHtml(s0.image, s0.title)}
+          <span class="store-kind">Sticker · 3" × 3"</span>
+          <h3 class="sticker-name">${s0.title}</h3>
+          <p class="store-desc">Original fish artwork on weatherproof vinyl. Pick your fish below.</p>
+          <div class="cloth-colors">${chips}</div>
+          <a class="store-cta sticker-buy" href="${s0.url}" target="_blank" rel="noopener">Buy <span class="arrow">→</span></a>
+        </article>
       `;
+    }
+
+    function bindStickers() {
+      const card = document.querySelector('[data-stickers]');
+      if (!card) return;
+      card.querySelectorAll('[data-sticker]').forEach((chip) => {
+        chip.addEventListener('click', () => setSticker(card, +chip.dataset.sticker));
+      });
+    }
+
+    function setSticker(card, idx) {
+      const s = stickers[idx];
+      card.querySelectorAll('.color-chip').forEach((c, k) => c.classList.toggle('active', k === idx));
+      const cover = card.querySelector('.store-cover');
+      cover.classList.remove('is-empty');
+      cover.querySelector('img').src = s.image;
+      cover.querySelector('.cover-label').textContent = s.title;
+      card.querySelector('.sticker-name').textContent = s.title;
+      card.querySelector('.sticker-buy').setAttribute('href', s.url);
     }
 
     function clothingCard(item, i) {
@@ -1697,7 +1729,11 @@
 
     function appCard(a) {
       const cover = a.image
-        ? `<div class="app-cover"><img src="${a.image}" alt="${a.title} screenshot" loading="lazy"></div>`
+        ? `<div class="app-cover">
+             <img src="${a.image}" alt="${a.title} screenshot" loading="lazy"
+               onerror="this.closest('.app-cover').classList.add('placeholder'); this.remove();">
+             <span>${a.title}</span>
+           </div>`
         : `<div class="app-cover placeholder"><span>${a.title}</span></div>`;
       const tag = a.url ? 'a' : 'div';
       const attrs = a.url ? `href="${a.url}" target="_blank" rel="noopener"` : '';
