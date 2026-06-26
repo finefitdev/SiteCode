@@ -56,14 +56,20 @@
     }
 
     body {
+      background: var(--bg);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
       background:
         radial-gradient(circle 600px at var(--cursor-x) var(--cursor-y), rgba(255, 255, 255, 0.035), transparent 60%),
         radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 255, 255, 0.04), transparent 60%),
-        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255, 255, 255, 0.025), transparent 60%),
-        var(--bg);
-      background-attachment: fixed;
-      min-height: 100vh;
-      position: relative;
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255, 255, 255, 0.025), transparent 60%);
     }
 
     /* Scanlines + vignette */
@@ -1280,24 +1286,37 @@
         letter-spacing: 0.04em;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <header>
-    <a href="/" class="logo" data-link aria-label="Finefit home">
+    <a href="#" class="logo" aria-label="Finefit home">
       <span class="mark"></span>
       <span>FINEFIT</span>
     </a>
     <nav id="nav">
-      <a href="/#projects" data-scroll="projects">Projects</a>
-      <a href="/#socials" data-scroll="socials">Socials</a>
-      <a href="/apps" data-link>Apps</a>
-      <a href="/store" data-link>Store</a>
+      <a href="#projects" data-nav="projects">Projects</a>
+      <a href="#socials" data-nav="socials">Socials</a>
+      <a href="#apps" data-nav="apps">Apps</a>
+      <a href="#store" data-nav="store">Store</a>
     </nav>
   </header>
 
+  <div class="bg"></div>
   <main id="content"></main>
 
   <div id="image-modal" class="image-modal">
@@ -1310,10 +1329,19 @@
 
   <script>
     // ---------- Cursor spotlight ----------
-    document.addEventListener('mousemove', (e) => {
-      document.documentElement.style.setProperty('--cursor-x', e.clientX + 'px');
-      document.documentElement.style.setProperty('--cursor-y', e.clientY + 'px');
-    });
+    if (window.matchMedia('(pointer: fine)').matches) {
+      let sx = 0, sy = 0, spotQueued = false;
+      document.addEventListener('mousemove', (e) => {
+        sx = e.clientX; sy = e.clientY;
+        if (spotQueued) return;
+        spotQueued = true;
+        requestAnimationFrame(() => {
+          document.documentElement.style.setProperty('--cursor-x', sx + 'px');
+          document.documentElement.style.setProperty('--cursor-y', sy + 'px');
+          spotQueued = false;
+        });
+      }, { passive: true });
+    }
 
     // ---------- Data ----------
     const projects = [
@@ -1424,76 +1452,58 @@
     const carouselIdx = {};
 
     // ---------- Routing ----------
-    const routes = {
-      '/': (root) => renderHome(root),
-      '/projects': (root) => renderHome(root, 'projects'),
-      '/socials': (root) => renderHome(root, 'socials'),
-      '/apps': renderApps,
-      '/games': renderApps,
-      '/store': renderStore,
+    (function migrateLegacyPath() {
+      const p = location.pathname.replace(/\/+$/, '');
+      const legacy = { '/projects': 'projects', '/socials': 'socials', '/apps': 'apps', '/games': 'apps', '/store': 'store' };
+      if (!location.hash && legacy[p]) location.replace('/#' + legacy[p]);
+    })();
+
+    const views = {
+      home: renderHome,
+      apps: renderApps,
+      store: renderStore,
     };
 
-    const getPath = () => window.location.pathname || '/';
+    const currentRoute = () => (location.hash || '').replace(/^#\/?/, '').toLowerCase();
+    const viewForRoute = (route) => (route === 'apps' || route === 'store') ? route : 'home';
 
-    function navigate(path) {
-      if (getPath() === path) return;
-      teardown();
-      try { history.pushState({ path }, '', path); }
-      catch { window.__finefitPath = path; }
-      render(path);
+    let renderedView = null;
+
+    function handleRoute() {
+      const route = currentRoute();
+      const view = viewForRoute(route);
+
+      if (view !== renderedView) {
+        teardown();
+        const main = document.getElementById('content');
+        main.classList.remove('fade-in');
+        void main.offsetWidth;
+        views[view](main);
+        main.classList.add('fade-in');
+        renderedView = view;
+      }
+
+      if (view === 'home' && (route === 'projects' || route === 'socials')) {
+        requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(route)));
+      } else {
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
+
+      document.querySelectorAll('#nav a').forEach((a) => {
+        a.classList.toggle('active', a.dataset.nav === route);
+      });
+
+      const titles = { '': 'Finefit', projects: 'Projects · Finefit', socials: 'Socials · Finefit', apps: 'Apps · Finefit', store: 'Store · Finefit' };
+      document.title = titles[route] || 'Finefit';
     }
 
-    window.addEventListener('popstate', () => render(getPath()));
-
-    document.addEventListener('click', (e) => {
-      const scrollLink = e.target.closest('[data-scroll]');
-      if (scrollLink) {
-        e.preventDefault();
-        goToSection(scrollLink.getAttribute('data-scroll'));
-        return;
-      }
-      const a = e.target.closest('a[data-link]');
-      if (!a) return;
-      e.preventDefault();
-      navigate(a.getAttribute('href'));
-    });
+    window.addEventListener('hashchange', handleRoute);
 
     function scrollToSection(id) {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function goToSection(id) {
-      if (getPath() === '/' || getPath() === '/projects' || getPath() === '/socials') {
-        scrollToSection(id);
-      } else {
-        navigate('/');
-        requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(id)));
-      }
-    }
-
-    function render(path) {
-      path = path || window.__finefitPath || getPath();
-      const handler = routes[path] || render404;
-      const main = document.getElementById('content');
-      main.classList.remove('fade-in');
-      void main.offsetWidth;
-      handler(main);
-      main.classList.add('fade-in');
-
-      document.querySelectorAll('#nav a').forEach((a) => {
-        a.classList.toggle('active', a.getAttribute('href') === path);
-      });
-      const titles = {
-        '/': 'Finefit',
-        '/projects': 'Projects · Finefit',
-        '/socials': 'Socials · Finefit',
-        '/apps': 'Apps · Finefit',
-        '/games': 'Apps · Finefit',
-        '/store': 'Store · Finefit',
-      };
-      document.title = titles[path] || 'Finefit';
-      window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     function teardown() {
@@ -1501,16 +1511,16 @@
     }
 
     // ---------- Pages ----------
-    function renderHome(root, scrollTarget) {
+    function renderHome(root) {
       root.innerHTML = `
         <section class="home">
           <h1>Welcome</h1>
           <p class="sub">Self-taught developer. Shipping code since 2019, working with what I can teach myself.</p>
           <p class="tag">Look around</p>
-          <button class="scroll-cue" data-scroll="projects" aria-label="Scroll to projects">
+          <a class="scroll-cue" href="#projects" aria-label="Scroll to projects">
             <span>Scroll</span>
             <span class="chev">▼</span>
-          </button>
+          </a>
         </section>
         ${projectsSection()}
         ${socialsSection()}
@@ -1518,9 +1528,6 @@
       projects.forEach((_, i) => (carouselIdx[i] = 0));
       bindCarousels();
       initScrollSpy();
-      if (scrollTarget) {
-        requestAnimationFrame(() => requestAnimationFrame(() => scrollToSection(scrollTarget)));
-      }
     }
 
     function projectsSection() {
@@ -1541,7 +1548,7 @@
       const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
       if (!sections.length) return;
       const links = {};
-      ids.forEach((id) => { links[id] = document.querySelector(`#nav a[data-scroll="${id}"]`); });
+      ids.forEach((id) => { links[id] = document.querySelector(`#nav a[data-nav="${id}"]`); });
 
       const obs = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -1827,7 +1834,7 @@
         The page you requested doesn't exist.
       </p>
 
-      <a href="/" data-link class="social-link">
+      <a href="#" class="social-link">
         <span class="name-wrap">
           <span>Return Home</span>
         </span>
@@ -1885,7 +1892,7 @@
     });
 
     // ---------- Boot ----------
-    render(getPath());
+    handleRoute();
   </script>
 </body>
 
