@@ -1021,6 +1021,29 @@
       margin-bottom: 0.4rem;
     }
 
+    .store-price {
+      display: block;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: var(--fg);
+      text-shadow: var(--glow-soft);
+      margin-bottom: 0.85rem;
+    }
+
+    .store-price:empty {
+      display: none;
+    }
+
+    .store-was {
+      margin-left: 0.45rem;
+      font-size: 0.78em;
+      font-weight: 400;
+      color: var(--dimmer);
+      text-decoration: line-through;
+      text-shadow: none;
+    }
+
     .store-card .store-desc {
       color: var(--dim);
       font-size: 0.78rem;
@@ -1335,16 +1358,18 @@
     const CHECKOUT = 'https://finefit-shop.fourthwall.com/cart/checkout?products=';
 
     const stickers = [
-      { title: 'Bass Xanthic', desc: 'Xanthic bass print. 3" × 3" sticker.', image: 'images/sticker-bass-xanthic.png', url: CHECKOUT + 'e06e04e4-9bfe-4b28-bfa2-591b0e28694b' },
-      { title: 'Marsh Gar', desc: 'Marsh gar print. 3" × 3" sticker.', image: 'images/sticker-marsh-gar.png', url: CHECKOUT + 'ba1b882f-7254-47e8-a0ea-a3f0914ed3a0' },
-      { title: 'Sunscale', desc: 'Sunscale print. 3" × 3" sticker.', image: 'images/sticker-sunscale.png', url: CHECKOUT + 'f33c2216-4ae9-4349-a94f-a1498dafd066' },
-      { title: 'Rift Eel', desc: 'Rift eel print. 3" × 3" sticker.', image: 'images/sticker-rift-eel.png', url: CHECKOUT + '932975ac-9fc8-4f7f-a91a-e12ad37a9c1e' },
-      { title: 'Carp Calico', desc: 'Calico carp print. 3" × 3" sticker.', image: 'images/sticker-carp-calico.png', url: CHECKOUT + 'b4ec499f-96ab-4546-b674-282b3afd29d4' },
+      { title: 'Bass Xanthic', price: '$6', was: null, desc: 'Xanthic bass print. 3" × 3" sticker.', image: 'images/sticker-bass-xanthic.png', url: CHECKOUT + 'e06e04e4-9bfe-4b28-bfa2-591b0e28694b' },
+      { title: 'Marsh Gar', price: '$6', was: null, desc: 'Marsh gar print. 3" × 3" sticker.', image: 'images/sticker-marsh-gar.png', url: CHECKOUT + 'ba1b882f-7254-47e8-a0ea-a3f0914ed3a0' },
+      { title: 'Sunscale', price: '$6', was: null, desc: 'Sunscale print. 3" × 3" sticker.', image: 'images/sticker-sunscale.png', url: CHECKOUT + 'f33c2216-4ae9-4349-a94f-a1498dafd066' },
+      { title: 'Rift Eel', price: '$4', was: '$6', desc: 'Rift eel print. 3" × 3" sticker.', image: 'images/sticker-rift-eel.png', url: CHECKOUT + '932975ac-9fc8-4f7f-a91a-e12ad37a9c1e' },
+      { title: 'Carp Calico', price: '$4', was: '$6', desc: 'Calico carp print. 3" × 3" sticker.', image: 'images/sticker-carp-calico.png', url: CHECKOUT + 'b4ec499f-96ab-4546-b674-282b3afd29d4' },
     ];
 
     const clothing = [
       {
         title: 'One Last Cast Tee',
+        price: '$22',
+        was: '$30',
         desc: 'Soft cotton tee with the One Last Cast print. Pick a color and size to buy direct, or view every option on the product page.',
         productUrl: 'https://finefit-shop.fourthwall.com/products/one-last-cast-tee',
         colors: [
@@ -1659,6 +1684,11 @@
       bindClothing();
     }
 
+    function priceMarkup(price, was) {
+      if (!price) return '';
+      return `${price}${was ? ` <s class="store-was">${was}</s>` : ''}`;
+    }
+
     function coverHtml(image, label) {
       return `
         <div class="store-cover">
@@ -1679,6 +1709,7 @@
           ${coverHtml(s0.image, s0.title)}
           <span class="store-kind">Sticker · 3" × 3"</span>
           <h3 class="sticker-name">${s0.title}</h3>
+          <span class="store-price sticker-price">${priceMarkup(s0.price, s0.was)}</span>
           <p class="store-desc">Original fish artwork on weatherproof vinyl. Pick your fish below.</p>
           <div class="cloth-colors">${chips}</div>
           <a class="store-cta sticker-buy" href="${s0.url}" target="_blank" rel="noopener">Buy <span class="arrow">→</span></a>
@@ -1702,6 +1733,7 @@
       cover.querySelector('img').src = s.image;
       cover.querySelector('.cover-label').textContent = s.title;
       card.querySelector('.sticker-name').textContent = s.title;
+      card.querySelector('.sticker-price').innerHTML = priceMarkup(s.price, s.was);
       card.querySelector('.sticker-buy').setAttribute('href', s.url);
     }
 
@@ -1718,6 +1750,7 @@
           ${coverHtml(c0.image, item.title + ' · ' + c0.name)}
           <span class="store-kind">Apparel</span>
           <h3>${item.title}</h3>
+          <span class="store-price">${priceMarkup(item.price, item.was)}</span>
           <p class="store-desc">${item.desc}</p>
           <div class="cloth-colors">${chips}</div>
           <div class="cloth-sizes">${sizes}</div>
