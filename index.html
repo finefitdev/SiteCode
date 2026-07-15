@@ -846,6 +846,76 @@
       border-color: rgba(92, 240, 142, 0.4);
     }
 
+    /* Policy */
+    .policy-page {
+      max-width: 920px;
+    }
+
+    .policy-content {
+      display: grid;
+      gap: 1.75rem;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.75;
+      font-size: 0.95rem;
+    }
+
+    .policy-content h3 {
+      color: var(--fg);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.55rem;
+    }
+
+    .policy-content p + p {
+      margin-top: 0.75rem;
+    }
+
+    .policy-content ul {
+      list-style: none;
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 0.75rem;
+    }
+
+    .policy-content li {
+      position: relative;
+      padding-left: 1.15rem;
+    }
+
+    .policy-content li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.78em;
+      width: 5px;
+      height: 5px;
+      background: var(--fg);
+      box-shadow: var(--glow-soft);
+      transform: rotate(45deg);
+    }
+
+    .policy-content a {
+      color: var(--fg);
+      text-decoration-color: var(--line-2);
+      text-underline-offset: 0.25em;
+      overflow-wrap: anywhere;
+    }
+
+    .policy-updated {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--dim);
+      border: 1px solid var(--line);
+      padding: 0.5rem 0.7rem;
+      margin: 0.25rem 0 1.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
     .app-card h3 {
       font-family: 'Unbounded', sans-serif;
       font-weight: 500;
@@ -1461,11 +1531,16 @@
     const views = {
       home: renderHome,
       apps: renderApps,
+      privacy: renderPrivacyPolicy,
       store: renderStore,
     };
 
-    const currentRoute = () => (location.hash || '').replace(/^#\/?/, '').toLowerCase();
-    const viewForRoute = (route) => (route === 'apps' || route === 'store') ? route : 'home';
+    const currentRoute = () => {
+      const path = location.pathname.replace(/\/+$/, '').toLowerCase();
+      if (path === '/apps/privacypolicy') return 'privacy';
+      return (location.hash || '').replace(/^#\/?/, '').toLowerCase();
+    };
+    const viewForRoute = (route) => (route === 'apps' || route === 'store' || route === 'privacy') ? route : 'home';
 
     let renderedView = null;
 
@@ -1492,10 +1567,11 @@
       }
 
       document.querySelectorAll('#nav a').forEach((a) => {
-        a.classList.toggle('active', a.dataset.nav === route);
+        const activeRoute = route === 'privacy' ? 'apps' : route;
+        a.classList.toggle('active', a.dataset.nav === activeRoute);
       });
 
-      const titles = { '': 'Finefit', projects: 'Projects · Finefit', socials: 'Socials · Finefit', apps: 'Apps · Finefit', store: 'Store · Finefit' };
+      const titles = { '': 'Finefit', projects: 'Projects · Finefit', socials: 'Socials · Finefit', apps: 'Apps · Finefit', privacy: 'Privacy Policy · One Last Cast', store: 'Store · Finefit' };
       document.title = titles[route] || 'Finefit';
     }
 
@@ -1796,6 +1872,112 @@
           <p class="page-lede">Things I'm building and shipping — from a fishing game to open-source tools anyone can run.</p>
           <div class="apps-grid">
             ${apps.map(appCard).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderPrivacyPolicy(root) {
+      root.innerHTML = `
+        <section class="page policy-page">
+          <div class="page-meta"><span>/ apps / privacypolicy</span></div>
+          <h2 class="page-title">Privacy Policy - One Last Cast</h2>
+          <span class="policy-updated">Last updated: 7/15/26</span>
+          <div class="policy-content">
+            <section>
+              <p>This Privacy Policy explains how the mobile game One Last Cast ("the Game", "we", "us") handles information. The Game is developed by Joseph ("Finefit"). By playing the Game, you agree to this policy.</p>
+            </section>
+
+            <section>
+              <h3>Information handled by the Game</h3>
+              <p>We do not run our own game servers and do not directly collect personal information from you. The Game works as follows:</p>
+            </section>
+
+            <section>
+              <h3>On your device</h3>
+              <ul>
+                <li>Your game progress, including coins, caught fish, gear, settings, and run progress, is saved locally on your device. It is not transmitted to us by our own servers. Uninstalling the Game may remove this data.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Google Play Games Services</h3>
+              <ul>
+                <li>The Game uses Google Play Games Services to provide optional sign-in, achievements, leaderboards, and related platform features.</li>
+                <li>If you choose to sign in, Google may provide the Game with your Play Games player identifier and basic profile information, and may store your achievement progress, leaderboard scores, and related game activity on Google's servers, linked to your Google account.</li>
+                <li>This information is collected and processed by Google under the Google Privacy Policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a></li>
+                <li>You can view, manage, or delete your Play Games data through your Google account settings.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Advertising</h3>
+              <ul>
+                <li>The Game may show optional rewarded advertisements using Google AdMob / Google Mobile Ads.</li>
+                <li>Rewarded ads are optional. You may choose to watch an ad in exchange for an in-game reward, such as retrying after a failed run.</li>
+                <li>Google AdMob / Google Mobile Ads and its partners may collect and process information such as device information, app activity, diagnostics, approximate location, ad interactions, and advertising identifiers such as the Android Advertising ID. This information may be used to serve ads, limit abuse, measure ad performance, personalize or contextualize ads where permitted, and prevent fraud.</li>
+                <li>This information is collected and processed by Google and its partners under their own policies, including: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">https://policies.google.com/privacy</a> and <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">https://policies.google.com/technologies/ads</a></li>
+                <li>You can reset or delete your Android Advertising ID, or limit ad personalization, in your device settings.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Notifications</h3>
+              <ul>
+                <li>The Game may schedule local reminder notifications on your device. These are generated on-device and send no data to us or anyone else.</li>
+                <li>You can turn notifications off in the Game's settings or in your device settings.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Information we do NOT directly collect</h3>
+              <ul>
+                <li>We do not directly collect your name, email address, precise location, contacts, photos, messages, or payment information.</li>
+                <li>We do not run our own analytics servers.</li>
+                <li>Advertising identifiers may be collected or processed by Google AdMob / Google Mobile Ads as described in the Advertising section.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Data sharing</h3>
+              <ul>
+                <li>We do not sell your personal information.</li>
+                <li>We do not share personal information through our own servers.</li>
+                <li>Third-party services used by the Game may collect or process information as described above, including Google Play Games Services and Google AdMob / Google Mobile Ads.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Children's privacy</h3>
+              <ul>
+                <li>The Game is not directed to children under 13, and we do not knowingly collect personal information from children.</li>
+                <li>Google Play Games Services and Google AdMob have their own policies and age-related requirements set by Google.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Your choices</h3>
+              <ul>
+                <li>You can play without signing in to Google Play Games. Achievements and leaderboards will be unavailable.</li>
+                <li>You can choose not to watch rewarded ads. The ad reward will simply be unavailable.</li>
+                <li>You can turn off notifications in the Game's settings or in your device settings.</li>
+                <li>You can remove local game data by uninstalling the Game.</li>
+                <li>You can manage or delete Play Games data through your Google account.</li>
+                <li>You can manage ad personalization and reset or delete your Android Advertising ID in your device settings.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Changes to this policy</h3>
+              <ul>
+                <li>We may update this policy from time to time. Updates will be posted at this same URL with a new "Last updated" date.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3>Contact</h3>
+              <p>Questions about this policy: <a href="mailto:finefitgaming@gmail.com">finefitgaming@gmail.com</a></p>
+            </section>
           </div>
         </section>
       `;
